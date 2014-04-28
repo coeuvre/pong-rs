@@ -36,9 +36,13 @@ impl Ball {
 
     pub fn emit(&mut self) {
         if self.v.length() == unit::ZERO {
-            let dir = Vec2::new(rand::random::<f32>() * 2.0 - 1.0,
-                                rand::random::<f32>() * 2.0 - 1.0).norm();
-            self.v = dir * BALL_MOVE_SPEED;
+            let dx = if rand::random::<f32>() > 0.5 {
+                0.5
+            } else {
+                -0.5
+            };
+            self.set_direction(Vec2::new(dx,
+                                         rand::random::<f32>() * 2.0 - 1.0));
         }
     }
 
@@ -52,8 +56,32 @@ impl Ball {
                   player1: &mut Player, player2: &mut Player) {
         let dp = self.v * dt;
 
+        // check collision of x direction
+        let aabb = self.aabb.transform(self.pos + Vec2::new(dp.x, 0.0));
+        if dp.x < unit::ZERO {
+            if aabb.is_collided_with(left_wall_aabb) {
+                player2.win();
+                self.reset();
+            } if aabb.is_collided_with(&player1.aabb()) {
+                let dy = self.reflection(player1);
+                self.set_direction(Vec2::new(1.0, dy));
+            } else {
+                self.pos.x = self.pos.x + dp.x;
+            }
+        } else {
+            if aabb.is_collided_with(right_wall_aabb) {
+                player1.win();
+                self.reset();
+            } else if aabb.is_collided_with(&player2.aabb()) {
+                let dy = self.reflection(player2);
+                self.set_direction(Vec2::new(-1.0, dy));
+            } else {
+                self.pos.x = self.pos.x + dp.x;
+            }
+        }
+
         // check collision of y direction
-        let aabb = self.aabb.transform(self.pos + Vec2::new(unit::ZERO, dp.y));
+        let aabb = self.aabb.transform(self.pos + Vec2::new(0.0, dp.y));
         if dp.y < unit::ZERO {
             if aabb.is_collided_with(top_wall_aabb) {
                 self.pos.y = top_wall_aabb.bottom() + self.aabb.size().y / 2.0;
@@ -69,30 +97,6 @@ impl Ball {
                 self.pos.y = self.pos.y + dp.y;
             }
         }
-
-        // check collision of x direction
-        let aabb = self.aabb.transform(self.pos + Vec2::new(dp.x, unit::ZERO));
-        if dp.x < unit::ZERO {
-            if aabb.is_collided_with(left_wall_aabb) {
-                self.reset();
-                player2.win();
-            } if aabb.is_collided_with(&player1.aabb()) {
-                self.pos.x = player1.aabb().right() + aabb.size().x / 2.0;
-                self.v.x = -self.v.x;
-            } else {
-                self.pos.x = self.pos.x + dp.x;
-            }
-        } else {
-            if aabb.is_collided_with(right_wall_aabb) {
-                self.reset();
-                player1.win();
-            } else if aabb.is_collided_with(&player2.aabb()) {
-                self.pos.x = player2.aabb().left() - aabb.size().x / 2.0;
-                self.v.x = -self.v.x;
-            } else {
-                self.pos.x = self.pos.x + dp.x;
-            }
-        }
     }
 
     pub fn render(&self, renderer: &Renderer) {
@@ -102,5 +106,20 @@ impl Ball {
     pub fn reset(&mut self) {
         self.v = unit::vec2::ZERO;
         self.pos = Vec2::new(240.0, 160.0);
+    }
+
+    fn set_direction(&mut self, dir: Vec2) {
+        self.v = dir.norm() * BALL_MOVE_SPEED;
+    }
+
+    fn reflection(&self, player: &Player) -> Unit {
+        let mut y = self.pos.y - player.position().y;
+        if y > player.aabb().size.y / 2.0 {
+            y = player.aabb().size.y / 2.0;
+        } else if y < -player.aabb().size.y / 2.0 {
+            y = -player.aabb().size.y / 2.0;
+        }
+
+        y * 4.0 / player.aabb().size.y
     }
 }

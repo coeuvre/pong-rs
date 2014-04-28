@@ -41,6 +41,10 @@ impl Player {
         self.aabb.transform(self.pos)
     }
 
+    pub fn position(&self) -> Vec2 {
+        self.pos
+    }
+
     pub fn offset(&mut self, offset: Vec2) {
         self.pos = self.pos + offset;
     }
