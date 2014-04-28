@@ -21,8 +21,8 @@ static MAX_TIME_BETWEEN_FRAME: MS = MS(1000);
 static PLAYER_PADDING: f32 = 16.0;
 
 pub fn run() {
-    sdl2::init([sdl2::InitEverything]);
-    sdl2_image::init([sdl2_image::InitPng, sdl2_image::InitJpg]);
+    sdl2::init(sdl2::InitEverything);
+    sdl2_image::init(sdl2_image::InitPng & sdl2_image::InitJpg);
 
     Pong::new().event_loop();
 

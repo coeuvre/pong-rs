@@ -25,11 +25,11 @@ impl Renderer {
 
         let window = Window::new(
             "pong-rs", video::PosCentered, video::PosCentered,
-            w, h, [video::OpenGL]
+            w, h, video::OpenGL
         ).unwrap();
 
         let renderer = render::Renderer::from_window(
-            window, render::DriverAuto, [render::Accelerated]
+            window, render::DriverAuto, render::Accelerated
         ).unwrap();
 
         Renderer {
