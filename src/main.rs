@@ -1,6 +1,7 @@
 #![crate_type = "bin"]
 
 extern crate collections;
+extern crate rand;
 extern crate native;
 
 extern crate sdl2;

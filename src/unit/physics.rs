@@ -7,11 +7,16 @@ pub struct Vec2 {
 }
 
 impl Vec2 {
-    pub fn new(x: Unit, y: Unit) -> Vec2 {
+    pub fn new<A: ToUnit, B: ToUnit>(x: A, y: B) -> Vec2 {
         Vec2 {
-            x: x,
-            y: y,
+            x: x.to_unit(),
+            y: y.to_unit(),
         }
+    }
+
+    pub fn norm(&self) -> Vec2 {
+        let len = self.length();
+        Vec2::new(self.x / len, self.y / len)
     }
 
     pub fn length(&self) -> Unit {
@@ -58,7 +63,7 @@ pub struct AABB {
 }
 
 impl AABB {
-    pub fn new(x: Unit, y: Unit, w: Unit, h: Unit) -> AABB {
+    pub fn new<A: ToUnit, B: ToUnit, C: ToUnit, D: ToUnit>(x: A, y: B, w: C, h: D) -> AABB {
         AABB {
             center: Vec2::new(x, y),
             size: Vec2::new(w, h),

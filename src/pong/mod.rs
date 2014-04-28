@@ -7,7 +7,8 @@ use input::Input;
 use renderer;
 use sprite::Sprite;
 
-use unit::{Unit, Pixel, Size, MS, Vec2, AABB};
+use unit;
+use unit::{Size, MS, Vec2, AABB};
 
 use self::player::Player;
 use self::ball::Ball;
@@ -46,17 +47,17 @@ struct Pong {
 
 impl Pong {
     fn new() -> Pong {
-        let mut renderer = renderer::Renderer::new(Size::new(Pixel(480), Pixel(320)));
+        let mut renderer = renderer::Renderer::new(Size::new(480, 320));
         let bg = Sprite::new(&mut renderer, ~"assets/background.png");
 
         let mut player1 = Player::new(&mut renderer);
-        player1.offset(Vec2::new(Unit(PLAYER_PADDING), Unit(160.0)));
+        player1.offset(Vec2::new(PLAYER_PADDING, 160.0));
 
         let mut player2 = Player::new(&mut renderer);
-        player2.offset(Vec2::new(Unit(480.0 - PLAYER_PADDING), Unit(160.0)));
+        player2.offset(Vec2::new(480.0 - PLAYER_PADDING, 160.0));
 
         let mut ball = Ball::new(&mut renderer);
-        ball.offset(Vec2::new(Unit(240.0), Unit(160.0)));
+        ball.reset();
 
         Pong {
             renderer: renderer,
@@ -66,18 +67,10 @@ impl Pong {
             ball: ball,
 
             // set up AABB for walls according to `background.png`
-            top_wall_aabb: AABB::new(
-                Unit(240.0), Unit(8.0), Unit(480.0), Unit(16.0)
-            ),
-            bottom_wall_aabb: AABB::new(
-                Unit(240.0), Unit(320.0 - 8.0), Unit(480.0), Unit(16.0)
-            ),
-            left_wall_aabb: AABB::new(
-                Unit(-8.0), Unit(160.0), Unit(16.0), Unit(320.0)
-            ),
-            right_wall_aabb: AABB::new(
-                Unit(480.0 + 8.0), Unit(160.0), Unit(16.0), Unit(320.0)
-            ),
+            top_wall_aabb: AABB::new(240.0, 8.0, 480.0, 16.0),
+            bottom_wall_aabb: AABB::new(240.0, 320.0 - 8.0, 480.0, 16.0),
+            left_wall_aabb: AABB::new(-8.0, 160.0, 16.0, 320.0),
+            right_wall_aabb: AABB::new(480.0 + 8.0, 160.0, 16.0, 320.0),
         }
     }
 
@@ -153,14 +146,16 @@ impl Pong {
     fn update(&mut self, dt: MS) {
         self.player1.update(dt, &self.top_wall_aabb, &self.bottom_wall_aabb);
         self.player2.update(dt, &self.top_wall_aabb, &self.bottom_wall_aabb);
-        self.ball.update(dt, &self.top_wall_aabb, &self.bottom_wall_aabb,
-                         &self.left_wall_aabb, &self.right_wall_aabb);
+        self.ball.update(dt,
+                         &self.top_wall_aabb, &self.bottom_wall_aabb,
+                         &self.left_wall_aabb, &self.right_wall_aabb,
+                         &mut self.player1, &mut self.player2);
     }
 
     fn render(&self) {
         self.renderer.clear();
 
-        self.background.render(&self.renderer, Vec2::new(Unit(0.0), Unit(0.0)));
+        self.background.render(&self.renderer, unit::vec2::ZERO);
 
         self.player1.render(&self.renderer);
         self.player2.render(&self.renderer);

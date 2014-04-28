@@ -4,7 +4,7 @@ use sprite::Sprite;
 use unit;
 use unit::{Vec2, AABB, Point, Unit, ToUnit, MS};
 
-static PLAYER_MOVE_SPEED: f32 = 0.2;
+static PLAYER_MOVE_SPEED: Unit = Unit(0.3);
 
 pub struct Player {
     score: int,
@@ -37,25 +37,35 @@ impl Player {
         }
     }
 
+    pub fn aabb(&self) -> AABB {
+        self.aabb.transform(self.pos)
+    }
+
     pub fn offset(&mut self, offset: Vec2) {
         self.pos = self.pos + offset;
     }
 
     pub fn start_moving_up(&mut self) {
-        self.vy = Unit(-PLAYER_MOVE_SPEED);
+        self.vy = -PLAYER_MOVE_SPEED;
     }
 
     pub fn start_moving_down(&mut self) {
-        self.vy = Unit(PLAYER_MOVE_SPEED);
+        self.vy = PLAYER_MOVE_SPEED;
     }
 
     pub fn stop_move(&mut self) {
         self.vy = Unit(0.0);
     }
 
-    pub fn update(&mut self, dt: MS, top_wall_aabb: &AABB, bottom_wall_aabb: &AABB) {
+    pub fn win(&mut self) {
+        self.score += 1;
+    }
+
+    pub fn update(&mut self, dt: MS,
+                  top_wall_aabb: &AABB,
+                  bottom_wall_aabb: &AABB) {
         let dy = self.vy * dt;
-        let aabb = self.aabb.transform(self.pos + Vec2::new(Unit(0.0), dy));
+        let aabb = self.aabb.transform(self.pos + Vec2::new(0.0, dy));
         if dy < unit::ZERO {
             if aabb.is_collided_with(top_wall_aabb) {
                 self.pos.y = top_wall_aabb.bottom() + self.aabb.size().y / 2.0;

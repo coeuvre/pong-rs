@@ -54,10 +54,10 @@ pub struct Point {
 }
 
 impl Point {
-    pub fn new(x: Pixel, y: Pixel) -> Point {
+    pub fn new<A: ToPixel, B: ToPixel>(x: A, y: B) -> Point {
         Point {
-            x: x,
-            y: y,
+            x: x.to_pixel(),
+            y: y.to_pixel(),
         }
     }
 }
@@ -79,10 +79,10 @@ pub struct Size {
 
 impl Size {
     #[inline]
-    pub fn new(w: Pixel, h: Pixel) -> Size {
+    pub fn new<A: ToPixel, B: ToPixel>(w: A, h: B) -> Size {
         Size {
-            w: w,
-            h: h,
+            w: w.to_pixel(),
+            h: h.to_pixel(),
         }
     }
 }
