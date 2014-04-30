@@ -59,10 +59,6 @@ impl Ball {
         }
     }
 
-    pub fn offset(&mut self, offset: Vec2) {
-        self.pos = self.pos + offset;
-    }
-
     pub fn update(&mut self, dt: MS,
                   top_wall_aabb: &AABB, bottom_wall_aabb: &AABB,
                   left_wall_aabb: &AABB, right_wall_aabb: &AABB,
@@ -77,12 +73,12 @@ impl Ball {
                 println!("{} : {}", player1.score(), player2.score());
                 self.reset();
 
-                self.peeeeeep.play(1);
+                self.peeeeeep.play(1).unwrap();
             } if aabb.is_collided_with(&player1.aabb()) {
                 let dy = self.reflection(player1);
                 self.set_direction(Vec2::new(1.0, dy));
 
-                self.beeep.play(1);
+                self.beeep.play(1).unwrap();
             } else {
                 self.pos.x = self.pos.x + dp.x;
             }
@@ -92,12 +88,12 @@ impl Ball {
                 println!("{} : {}", player1.score(), player2.score());
                 self.reset();
 
-                self.peeeeeep.play(1);
+                self.peeeeeep.play(1).unwrap();
             } else if aabb.is_collided_with(&player2.aabb()) {
                 let dy = self.reflection(player2);
                 self.set_direction(Vec2::new(-1.0, dy));
 
-                self.beeep.play(1);
+                self.beeep.play(1).unwrap();
             } else {
                 self.pos.x = self.pos.x + dp.x;
             }
@@ -110,7 +106,7 @@ impl Ball {
                 self.pos.y = top_wall_aabb.bottom() + self.aabb.size().y / 2.0;
                 self.v.y = -self.v.y;
 
-                self.plop.play(1);
+                self.plop.play(1).unwrap();
             } else {
                 self.pos.y = self.pos.y + dp.y;
             }
@@ -119,7 +115,7 @@ impl Ball {
                 self.pos.y = bottom_wall_aabb.top() - self.aabb.size().y / 2.0;
                 self.v.y = -self.v.y;
 
-                self.plop.play(1);
+                self.plop.play(1).unwrap();
             } else {
                 self.pos.y = self.pos.y + dp.y;
             }
@@ -141,6 +137,9 @@ impl Ball {
 
     fn reflection(&self, player: &Player) -> Unit {
         let mut y = self.pos.y - player.position().y;
+
+        y = y * rand::random::<f32>() * 0.4 + 0.8;
+
         if y > player.aabb().size.y / 2.0 {
             y = player.aabb().size.y / 2.0;
         } else if y < -player.aabb().size.y / 2.0 {
