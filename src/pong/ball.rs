@@ -1,13 +1,18 @@
 use rand;
 
+use std::rc::Rc;
+
+use sdl2_mixer::Music;
+
 use super::player::Player;
 use sprite::Sprite;
 use renderer::Renderer;
+use mixer::Mixer;
 
 use unit;
 use unit::{Unit, Vec2, AABB, Point, MS};
 
-static BALL_MOVE_SPEED: Unit = Unit(0.4);
+static BALL_MOVE_SPEED: Unit = Unit(0.5);
 
 pub struct Ball {
     sprite: Sprite,
@@ -16,10 +21,14 @@ pub struct Ball {
     v: Vec2,
 
     aabb: AABB,
+
+    beeep: Rc<~Music>,
+    peeeeeep: Rc<~Music>,
+    plop: Rc<~Music>,
 }
 
 impl Ball {
-    pub fn new(renderer: &mut Renderer) -> Ball {
+    pub fn new(renderer: &mut Renderer, mixer: &mut Mixer) -> Ball {
         let mut sprite = Sprite::new(renderer, ~"assets/ball.png");
         let size = sprite.size();
         sprite.set_pivot(Point::new(size.w / 2, size.h / 2));
@@ -31,6 +40,10 @@ impl Ball {
             aabb: AABB::new(
                 0.0, 0.0, size.w, size.h
             ),
+
+            beeep: mixer.load_music(~"assets/beeep.ogg"),
+            peeeeeep: mixer.load_music(~"assets/peeeeeep.ogg"),
+            plop: mixer.load_music(~"assets/plop.ogg"),
         }
     }
 
@@ -61,20 +74,30 @@ impl Ball {
         if dp.x < unit::ZERO {
             if aabb.is_collided_with(left_wall_aabb) {
                 player2.win();
+                println!("{} : {}", player1.score(), player2.score());
                 self.reset();
+
+                self.peeeeeep.play(1);
             } if aabb.is_collided_with(&player1.aabb()) {
                 let dy = self.reflection(player1);
                 self.set_direction(Vec2::new(1.0, dy));
+
+                self.beeep.play(1);
             } else {
                 self.pos.x = self.pos.x + dp.x;
             }
         } else {
             if aabb.is_collided_with(right_wall_aabb) {
                 player1.win();
+                println!("{} : {}", player1.score(), player2.score());
                 self.reset();
+
+                self.peeeeeep.play(1);
             } else if aabb.is_collided_with(&player2.aabb()) {
                 let dy = self.reflection(player2);
                 self.set_direction(Vec2::new(-1.0, dy));
+
+                self.beeep.play(1);
             } else {
                 self.pos.x = self.pos.x + dp.x;
             }
@@ -86,6 +109,8 @@ impl Ball {
             if aabb.is_collided_with(top_wall_aabb) {
                 self.pos.y = top_wall_aabb.bottom() + self.aabb.size().y / 2.0;
                 self.v.y = -self.v.y;
+
+                self.plop.play(1);
             } else {
                 self.pos.y = self.pos.y + dp.y;
             }
@@ -93,6 +118,8 @@ impl Ball {
             if aabb.is_collided_with(bottom_wall_aabb) {
                 self.pos.y = bottom_wall_aabb.top() - self.aabb.size().y / 2.0;
                 self.v.y = -self.v.y;
+
+                self.plop.play(1);
             } else {
                 self.pos.y = self.pos.y + dp.y;
             }

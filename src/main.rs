@@ -6,13 +6,14 @@ extern crate native;
 
 extern crate sdl2;
 extern crate sdl2_image;
-//extern crate sdl2_ttf;
 extern crate sdl2_mixer;
+//extern crate sdl2_ttf;
 
 mod sprite;
 mod input;
 mod unit;
 mod renderer;
+mod mixer;
 //mod timer;
 
 mod pong;

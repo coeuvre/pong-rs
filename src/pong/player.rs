@@ -45,6 +45,10 @@ impl Player {
         self.pos
     }
 
+    pub fn score(&self) -> int {
+        self.score
+    }
+
     pub fn offset(&mut self, offset: Vec2) {
         self.pos = self.pos + offset;
     }

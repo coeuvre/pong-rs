@@ -2,10 +2,12 @@ use sdl2;
 use sdl2::{event, keycode};
 
 use sdl2_image;
+use sdl2_mixer;
 
 use input::Input;
 use renderer;
 use sprite::Sprite;
+use mixer::Mixer;
 
 use unit;
 use unit::{Size, MS, Vec2, AABB};
@@ -23,7 +25,12 @@ static PLAYER_PADDING: f32 = 16.0;
 
 pub fn run() {
     sdl2::init(sdl2::InitEverything);
-    sdl2_image::init(sdl2_image::InitPng & sdl2_image::InitJpg);
+
+    sdl2_image::init(sdl2_image::InitPng | sdl2_image::InitJpg);
+
+    sdl2_mixer::init(sdl2_mixer::InitOgg);
+    sdl2_mixer::open_audio(sdl2_mixer::DEFAULT_FREQUENCY, 0x8010u16, 2, 1024).unwrap();
+    sdl2_mixer::allocate_channels(0);
 
     Pong::new().event_loop();
 
@@ -47,6 +54,8 @@ struct Pong {
 
 impl Pong {
     fn new() -> Pong {
+        let mut mixer = Mixer::new();
+
         let mut renderer = renderer::Renderer::new(Size::new(480, 320));
         let bg = Sprite::new(&mut renderer, ~"assets/background.png");
 
@@ -56,7 +65,7 @@ impl Pong {
         let mut player2 = Player::new(&mut renderer);
         player2.offset(Vec2::new(480.0 - PLAYER_PADDING, 160.0));
 
-        let mut ball = Ball::new(&mut renderer);
+        let mut ball = Ball::new(&mut renderer, &mut mixer);
         ball.reset();
 
         Pong {
