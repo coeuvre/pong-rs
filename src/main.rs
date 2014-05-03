@@ -14,6 +14,7 @@ mod input;
 mod unit;
 mod renderer;
 mod mixer;
+mod scene;
 //mod timer;
 
 mod pong;
