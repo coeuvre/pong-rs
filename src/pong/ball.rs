@@ -4,13 +4,13 @@ use std::rc::Rc;
 
 use sdl2_mixer::Music;
 
-use super::player::Player;
-use sprite::Sprite;
-use renderer::Renderer;
-use mixer::Mixer;
+use core::sprite::Sprite;
+use core::renderer::Renderer;
+use core::mixer::Mixer;
+use core::unit;
+use core::unit::{Unit, Vec2, AABB, Point, MS};
 
-use unit;
-use unit::{Unit, Vec2, AABB, Point, MS};
+use super::player::Player;
 
 static BALL_MOVE_SPEED: Unit = Unit(0.5);
 

@@ -9,14 +9,7 @@ extern crate sdl2_image;
 extern crate sdl2_mixer;
 //extern crate sdl2_ttf;
 
-mod sprite;
-mod input;
-mod unit;
-mod renderer;
-mod mixer;
-mod scene;
-//mod timer;
-
+mod core;
 mod pong;
 
 #[start]

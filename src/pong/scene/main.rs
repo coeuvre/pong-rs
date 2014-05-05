@@ -1,14 +1,12 @@
 use sdl2::keycode;
 
-use scene::{Scene, SceneManager};
-
-use input::Input;
-use renderer::Renderer;
-use sprite::Sprite;
-use mixer::Mixer;
-
-use unit;
-use unit::{MS, Vec2, AABB};
+use core::scene::{Scene, SceneManager};
+use core::input::Input;
+use core::renderer::Renderer;
+use core::sprite::Sprite;
+use core::mixer::Mixer;
+use core::unit;
+use core::unit::{MS, Vec2, AABB};
 
 use pong::player::Player;
 use pong::ball::Ball;

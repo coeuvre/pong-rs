@@ -1,8 +1,7 @@
-use renderer::Renderer;
-use sprite::Sprite;
-
-use unit;
-use unit::{Vec2, AABB, Point, Unit, ToUnit, MS};
+use core::renderer::Renderer;
+use core::sprite::Sprite;
+use core::unit;
+use core::unit::{Vec2, AABB, Point, Unit, ToUnit, MS};
 
 static PLAYER_MOVE_SPEED: Unit = Unit(0.3);
 

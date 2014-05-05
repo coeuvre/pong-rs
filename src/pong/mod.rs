@@ -4,12 +4,11 @@ use sdl2::{event, keycode};
 use sdl2_image;
 use sdl2_mixer;
 
-use input::Input;
-use renderer::Renderer;
-use mixer::Mixer;
-use scene::SceneManager;
-
-use unit::{Size, MS};
+use core::input::Input;
+use core::renderer::Renderer;
+use core::mixer::Mixer;
+use core::scene::SceneManager;
+use core::unit::{Size, MS};
 
 use self::scene::Main;
 
