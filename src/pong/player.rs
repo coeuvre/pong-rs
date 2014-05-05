@@ -19,7 +19,7 @@ pub struct Player {
 
 impl Player {
     pub fn new(renderer: &mut Renderer) -> Player {
-        let mut sprite = Sprite::new(renderer, ~"assets/player.png");
+        let mut sprite = Sprite::new(renderer, "assets/player.png".to_owned());
         let size = sprite.size();
         sprite.set_pivot(Point::new(size.w / 2, size.h / 2));
 

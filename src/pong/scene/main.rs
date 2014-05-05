@@ -30,7 +30,7 @@ pub struct Main {
 
 impl Main {
     pub fn new(renderer: &mut Renderer, mixer: &mut Mixer) -> Main {
-        let bg = Sprite::new(renderer, ~"assets/background.png");
+        let bg = Sprite::new(renderer, "assets/background.png".to_owned());
 
         let mut player1 = Player::new(renderer);
         player1.offset(Vec2::new(PLAYER_PADDING, 160.0));

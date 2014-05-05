@@ -29,7 +29,7 @@ pub struct Ball {
 
 impl Ball {
     pub fn new(renderer: &mut Renderer, mixer: &mut Mixer) -> Ball {
-        let mut sprite = Sprite::new(renderer, ~"assets/ball.png");
+        let mut sprite = Sprite::new(renderer, "assets/ball.png".to_owned());
         let size = sprite.size();
         sprite.set_pivot(Point::new(size.w / 2, size.h / 2));
 
@@ -41,9 +41,9 @@ impl Ball {
                 0.0, 0.0, size.w, size.h
             ),
 
-            beeep: mixer.load_music(~"assets/beeep.ogg"),
-            peeeeeep: mixer.load_music(~"assets/peeeeeep.ogg"),
-            plop: mixer.load_music(~"assets/plop.ogg"),
+            beeep: mixer.load_music("assets/beeep.ogg".to_owned()),
+            peeeeeep: mixer.load_music("assets/peeeeeep.ogg".to_owned()),
+            plop: mixer.load_music("assets/plop.ogg".to_owned()),
         }
     }
 
