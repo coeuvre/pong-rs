@@ -11,7 +11,7 @@ use sdl2::render::Texture;
 
 use sdl2_image::LoadTexture;
 
-use core::unit::{Point, Size};
+use unit::{Point, Size};
 
 pub struct Renderer {
     textures: ~HashMap<~str, Rc<~Texture>>,
@@ -19,12 +19,12 @@ pub struct Renderer {
 }
 
 impl Renderer {
-    pub fn new(size: Size) -> Renderer {
+    pub fn new(title: &str, size: Size) -> Renderer {
         let w = size.w.val();
         let h = size.h.val();
 
         let window = Window::new(
-            "pong-rs", video::PosCentered, video::PosCentered,
+            title, video::PosCentered, video::PosCentered,
             w, h, video::OpenGL
         ).unwrap();
 

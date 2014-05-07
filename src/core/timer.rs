@@ -1,4 +1,4 @@
-use core::unit::MS;
+use unit::MS;
 
 pub struct Timer {
     is_active: bool,

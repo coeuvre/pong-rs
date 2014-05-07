@@ -1,15 +1,12 @@
-use sdl2::keycode;
-
-use core::scene::{Scene, SceneManager};
-use core::input::Input;
-use core::renderer::Renderer;
+use core::input::keycode;
+use core::scene::Scene;
 use core::sprite::Sprite;
-use core::mixer::Mixer;
 use core::unit;
-use core::unit::{MS, Vec2, AABB};
+use core::unit::{Vec2, AABB};
+use core::Core;
 
-use pong::player::Player;
-use pong::ball::Ball;
+use player::Player;
+use ball::Ball;
 
 static PLAYER_PADDING: f32 = 16.0;
 
@@ -27,7 +24,10 @@ pub struct Main {
 }
 
 impl Main {
-    pub fn new(renderer: &mut Renderer, mixer: &mut Mixer) -> Main {
+    pub fn new(core: &mut Core) -> Main {
+        let ref mut renderer = core.renderer;
+        let ref mut mixer = core.mixer;
+
         let bg = Sprite::new(renderer, "assets/background.png".to_owned());
 
         let mut player1 = Player::new(renderer);
@@ -60,7 +60,8 @@ impl Scene for Main {
         true
     }
 
-    fn update(&mut self, scene_manager: &mut SceneManager, input: &Input, dt: MS) {
+    fn update(&mut self, core: &mut Core) {
+        let ref mut input = core.input;
         // player1 input
         if input.is_key_held(keycode::WKey) && input.is_key_held(keycode::SKey) {
             self.player1.stop_move();
@@ -89,15 +90,17 @@ impl Scene for Main {
             self.ball.emit();
         }
 
-        self.player1.update(dt, &self.top_wall_aabb, &self.bottom_wall_aabb);
-        self.player2.update(dt, &self.top_wall_aabb, &self.bottom_wall_aabb);
-        self.ball.update(dt,
+        self.player1.update(core.dt, &self.top_wall_aabb, &self.bottom_wall_aabb);
+        self.player2.update(core.dt, &self.top_wall_aabb, &self.bottom_wall_aabb);
+        self.ball.update(core.dt,
                          &self.top_wall_aabb, &self.bottom_wall_aabb,
                          &self.left_wall_aabb, &self.right_wall_aabb,
                          &mut self.player1, &mut self.player2);
     }
 
-    fn render(&self, renderer: &Renderer) {
+    fn render(&mut self, core: &mut Core) {
+        let ref renderer = core.renderer;
+
         renderer.clear();
 
         self.background.render(renderer, unit::vec2::ZERO);

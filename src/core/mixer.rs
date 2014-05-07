@@ -5,6 +5,8 @@ extern crate collections;
 use std::rc::Rc;
 use collections::hashmap::HashMap;
 
+pub use sdl2_mixer::Music;
+
 pub struct Mixer {
     musics: HashMap<~str, Rc<~sdl2_mixer::Music>>,
 }

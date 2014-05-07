@@ -1,6 +1,6 @@
-use sdl2::keycode;
-
 use collections::hashmap::HashMap;
+
+pub use sdl2::keycode;
 
 pub struct Input {
     pressed_keys: HashMap<keycode::KeyCode, bool>,

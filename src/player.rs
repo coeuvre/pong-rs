@@ -3,7 +3,7 @@ use core::sprite::Sprite;
 use core::unit;
 use core::unit::{Vec2, AABB, Point, Unit, ToUnit, MS};
 
-static PLAYER_MOVE_SPEED: Unit = Unit(0.3);
+static PLAYER_MOVE_SPEED: f32 = 0.3;
 
 pub struct Player {
     score: int,
@@ -53,11 +53,11 @@ impl Player {
     }
 
     pub fn start_moving_up(&mut self) {
-        self.vy = -PLAYER_MOVE_SPEED;
+        self.vy = Unit(-PLAYER_MOVE_SPEED);
     }
 
     pub fn start_moving_down(&mut self) {
-        self.vy = PLAYER_MOVE_SPEED;
+        self.vy = Unit(PLAYER_MOVE_SPEED);
     }
 
     pub fn stop_move(&mut self) {

@@ -1,21 +1,7 @@
-use sdl2;
-use sdl2::{event, keycode};
-
-use sdl2_image;
-use sdl2_mixer;
-
-use core::input::Input;
-use core::renderer::Renderer;
-use core::mixer::Mixer;
-use core::scene::SceneManager;
-use core::unit::{Size, MS};
-
-use self::scene::Main;
-
 mod player;
 mod ball;
-mod scene;
-
+pub mod scene;
+/*
 static FRAME_TIME: MS = MS(1000 / 60);
 static MAX_TIME_BETWEEN_FRAME: MS = MS(1000);
 
@@ -44,7 +30,7 @@ struct Pong {
 impl Pong {
     fn new() -> Pong {
         Pong {
-            renderer: Renderer::new(Size::new(480, 320)),
+            renderer: Renderer::new("pong-rs", Size::new(480, 320)),
             input: Input::new(),
             mixer: Mixer::new(),
             scene_manager: SceneManager::new(),
@@ -101,3 +87,4 @@ impl Pong {
         self.scene_manager.render(&self.renderer);
     }
 }
+*/

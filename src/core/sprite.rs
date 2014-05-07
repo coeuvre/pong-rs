@@ -2,8 +2,8 @@ use std::rc::Rc;
 
 use sdl2::render::Texture;
 
-use core::renderer::Renderer;
-use core::unit::{Pixel, ToPixel, Point, Size, Vec2};
+use renderer::Renderer;
+use unit::{Pixel, ToPixel, Point, Size, Vec2};
 
 pub struct Sprite {
     texture: Rc<~Texture>,

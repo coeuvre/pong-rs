@@ -2,17 +2,15 @@ use rand;
 
 use std::rc::Rc;
 
-use sdl2_mixer::Music;
-
 use core::sprite::Sprite;
 use core::renderer::Renderer;
-use core::mixer::Mixer;
+use core::mixer::{Mixer, Music};
 use core::unit;
 use core::unit::{Unit, Vec2, AABB, Point, MS};
 
 use super::player::Player;
 
-static BALL_MOVE_SPEED: Unit = Unit(0.5);
+static BALL_MOVE_SPEED: f32 = 0.5;
 
 pub struct Ball {
     sprite: Sprite,

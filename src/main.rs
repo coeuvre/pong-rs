@@ -4,13 +4,14 @@ extern crate collections;
 extern crate rand;
 extern crate native;
 
-extern crate sdl2;
-extern crate sdl2_image;
-extern crate sdl2_mixer;
-//extern crate sdl2_ttf;
+extern crate core;
 
-mod core;
-mod pong;
+use core::Core;
+use core::unit::Size;
+
+mod player;
+mod ball;
+mod scene;
 
 #[start]
 fn start(argc: int, argv: **u8) -> int {
@@ -19,5 +20,7 @@ fn start(argc: int, argv: **u8) -> int {
 
 #[main]
 fn main() {
-    pong::run();
+    let mut core = Core::new("pong-rs", Size::new(480, 320));
+    let scene = ~scene::Main::new(&mut core);
+    core.run(scene);
 }
