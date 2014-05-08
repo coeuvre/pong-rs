@@ -15,8 +15,7 @@ pub struct Sprite {
 }
 
 impl Sprite {
-    pub fn new(renderer: &mut Renderer, filename: ~str) -> Sprite {
-        let tex = renderer.load_texture(filename);
+    pub fn from_texture(tex: Rc<~Texture>) -> Sprite {
         let query = tex.query().unwrap();
         let size = Size::new(Pixel(query.width), Pixel(query.height));
         Sprite {
@@ -25,6 +24,10 @@ impl Sprite {
             size: size,
             pivot: Point::new(Pixel(0), Pixel(0)),
         }
+    }
+
+    pub fn from_file(renderer: &mut Renderer, filename: ~str) -> Sprite {
+        Sprite::from_texture(renderer.load_texture(filename))
     }
 
     pub fn render(&self, renderer: &Renderer, at: Vec2) {

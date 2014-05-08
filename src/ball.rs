@@ -27,7 +27,7 @@ pub struct Ball {
 
 impl Ball {
     pub fn new(renderer: &mut Renderer, mixer: &mut Mixer) -> Ball {
-        let mut sprite = Sprite::new(renderer, "assets/ball.png".to_owned());
+        let mut sprite = Sprite::from_file(renderer, "assets/ball.png".to_owned());
         let size = sprite.size();
         sprite.set_pivot(Point::new(size.w / 2, size.h / 2));
 
@@ -72,7 +72,8 @@ impl Ball {
                 self.reset();
 
                 self.peeeeeep.play(1).unwrap();
-            } if aabb.is_collided_with(&player1.aabb()) {
+                return;
+            } else if aabb.is_collided_with(&player1.aabb()) {
                 let dy = self.reflection(player1);
                 self.set_direction(Vec2::new(1.0, dy));
 
@@ -87,6 +88,7 @@ impl Ball {
                 self.reset();
 
                 self.peeeeeep.play(1).unwrap();
+                return;
             } else if aabb.is_collided_with(&player2.aabb()) {
                 let dy = self.reflection(player2);
                 self.set_direction(Vec2::new(-1.0, dy));

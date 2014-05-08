@@ -6,6 +6,7 @@ extern crate collections;
 extern crate sdl2;
 extern crate sdl2_image;
 extern crate sdl2_mixer;
+extern crate sdl2_ttf;
 
 use std::rc::Rc;
 use std::cell::RefCell;
@@ -19,6 +20,7 @@ use scene::{Scene, SceneManager};
 use unit::{Size, MS};
 
 pub mod sprite;
+pub mod font;
 pub mod input;
 pub mod unit;
 pub mod renderer;
@@ -48,6 +50,8 @@ impl Core {
         sdl2_mixer::init(sdl2_mixer::InitOgg);
         sdl2_mixer::open_audio(sdl2_mixer::DEFAULT_FREQUENCY, 0x8010u16, 2, 1024).unwrap();
         sdl2_mixer::allocate_channels(0);
+
+        sdl2_ttf::init();
 
         Core {
             renderer: Renderer::new(title, size),

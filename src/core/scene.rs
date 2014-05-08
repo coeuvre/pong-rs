@@ -3,12 +3,8 @@ use std::vec::Vec;
 use Core;
 
 pub trait Scene {
-    fn start(&mut self) -> bool;
-
     fn update(&mut self, core: &mut Core);
     fn render(&mut self, core: &mut Core);
-
-    fn end(&mut self);
 }
 
 pub struct SceneManager {
@@ -23,17 +19,11 @@ impl SceneManager {
     }
 
     pub fn push(&mut self, scene: ~Scene) {
-        let mut s = scene;
-        if s.start() {
-            self.scenes.push(s);
-        }
+        self.scenes.push(scene);
     }
 
     pub fn pop(&mut self) {
-        match self.scenes.pop() {
-            Some(mut scene) => scene.end(),
-            None => {},
-        }
+        self.scenes.pop();
     }
 
     pub fn trans(&mut self, scene: ~Scene) {

@@ -1,6 +1,8 @@
+use core::font::pixels::RGBA;
 use core::input::keycode;
 use core::scene::Scene;
 use core::sprite::Sprite;
+use core::font::Font;
 use core::unit;
 use core::unit::{Vec2, AABB};
 use core::Core;
@@ -17,6 +19,8 @@ pub struct Main {
     player2: Player,
     ball: Ball,
 
+    font: Font,
+
     top_wall_aabb: AABB,
     bottom_wall_aabb: AABB,
     left_wall_aabb: AABB,
@@ -28,7 +32,7 @@ impl Main {
         let ref mut renderer = core.renderer;
         let ref mut mixer = core.mixer;
 
-        let bg = Sprite::new(renderer, "assets/background.png".to_owned());
+        let bg = Sprite::from_file(renderer, "assets/background.png".to_owned());
 
         let mut player1 = Player::new(renderer);
         player1.offset(Vec2::new(PLAYER_PADDING, 160.0));
@@ -39,11 +43,15 @@ impl Main {
         let mut ball = Ball::new(renderer, mixer);
         ball.reset();
 
+        let font = Font::from_file(renderer, "assets/font.TTF");
+
         Main {
             background: bg,
             player1: player1,
             player2: player2,
             ball: ball,
+
+            font: font,
 
             // set up AABB for walls according to `background.png`
             top_wall_aabb: AABB::new(240.0, 8.0, 480.0, 16.0),
@@ -56,10 +64,6 @@ impl Main {
 }
 
 impl Scene for Main {
-    fn start(&mut self) -> bool {
-        true
-    }
-
     fn update(&mut self, core: &mut Core) {
         let ref mut input = core.input;
         // player1 input
@@ -105,13 +109,12 @@ impl Scene for Main {
 
         self.background.render(renderer, unit::vec2::ZERO);
 
+        self.font.render(renderer, "NBX", RGBA(0, 255, 0, 255), Vec2::new(0.0, 32.0));
+
         self.player1.render(renderer);
         self.player2.render(renderer);
         self.ball.render(renderer);
 
         renderer.swap();
-    }
-
-    fn end(&mut self) {
     }
 }

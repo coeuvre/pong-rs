@@ -11,11 +11,15 @@ use sdl2::render::Texture;
 
 use sdl2_image::LoadTexture;
 
-use unit::{Point, Size};
+use sdl2_ttf;
+
+use unit::{Pixel, Point, Size};
 
 pub struct Renderer {
     textures: ~HashMap<~str, Rc<~Texture>>,
-    renderer: ~render::Renderer,
+    fonts: HashMap<~str, Rc<sdl2_ttf::Font>>,
+
+    renderer: render::Renderer,
 }
 
 impl Renderer {
@@ -34,10 +38,14 @@ impl Renderer {
 
         Renderer {
             textures: ~HashMap::<~str, Rc<~Texture>>::new(),
+            fonts: HashMap::<~str, Rc<sdl2_ttf::Font>>::new(),
             renderer: renderer,
         }
     }
 
+    pub fn sdl_renderer<'a>(&'a self) -> &'a render::Renderer {
+        &self.renderer
+    }
 
     pub fn load_texture(&mut self, filename: ~str) -> Rc<~Texture> {
         let self_renderer = &self.renderer;
@@ -45,6 +53,13 @@ impl Renderer {
         self.textures.find_or_insert_with(filename, |key| {
             let path = Path::new((*key).clone());
             Rc::new(self_renderer.load_texture(&path).unwrap())
+        }).clone()
+    }
+
+    pub fn load_font(&mut self, filename: &str) -> Rc<sdl2_ttf::Font> {
+        self.fonts.find_or_insert_with(filename.to_owned(), |key| {
+            let path = Path::new((*key).clone());
+            Rc::new(sdl2_ttf::Font::from_file(&path, 32).unwrap())
         }).clone()
     }
 
