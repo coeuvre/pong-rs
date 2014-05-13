@@ -2,11 +2,11 @@ use rand;
 
 use std::rc::Rc;
 
-use core::sprite::Sprite;
-use core::renderer::Renderer;
-use core::mixer::{Mixer, Music};
-use core::unit;
-use core::unit::{Unit, Vec2, AABB, Point, MS};
+use game::sprite::Sprite;
+use game::renderer::Renderer;
+use game::mixer::{Mixer, Music};
+use game::unit;
+use game::unit::{Unit, Vec2, AABB, Point, MS};
 
 use super::player::Player;
 
@@ -20,9 +20,9 @@ pub struct Ball {
 
     aabb: AABB,
 
-    beeep: Rc<~Music>,
-    peeeeeep: Rc<~Music>,
-    plop: Rc<~Music>,
+    beeep: Rc<Music>,
+    peeeeeep: Rc<Music>,
+    plop: Rc<Music>,
 }
 
 impl Ball {

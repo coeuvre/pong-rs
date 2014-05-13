@@ -1,7 +1,7 @@
-use core::renderer::Renderer;
-use core::sprite::Sprite;
-use core::unit;
-use core::unit::{Vec2, AABB, Point, Unit, ToUnit, MS};
+use game::renderer::Renderer;
+use game::sprite::Sprite;
+use game::unit;
+use game::unit::{Vec2, AABB, Point, Unit, ToUnit, MS};
 
 static PLAYER_MOVE_SPEED: f32 = 0.3;
 

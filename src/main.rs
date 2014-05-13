@@ -4,10 +4,10 @@ extern crate collections;
 extern crate rand;
 extern crate native;
 
-extern crate core;
+extern crate game;
 
-use core::Core;
-use core::unit::Size;
+use game::Game;
+use game::unit::Size;
 
 mod player;
 mod ball;
@@ -20,7 +20,7 @@ fn start(argc: int, argv: **u8) -> int {
 
 #[main]
 fn main() {
-    let mut core = Core::new("pong-rs", Size::new(480, 320));
-    let scene = ~scene::Main::new(&mut core);
-    core.run(scene);
+    let mut game = Game::new("pong-rs", Size::new(480, 320));
+    let scene = box scene::Main::new(&mut game);
+    game.run(scene);
 }

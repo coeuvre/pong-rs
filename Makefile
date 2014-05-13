@@ -1,5 +1,5 @@
 compile:
-	cd lib && rustc -L. ../src/core/lib.rs
+	rustc --out-dir=lib -Llib src/game/lib.rs
 	rustc -Llib src/main.rs -o pong -g
 
 run: compile

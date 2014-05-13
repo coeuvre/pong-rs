@@ -1,11 +1,11 @@
-use core::font::pixels::RGBA;
-use core::input::keycode;
-use core::scene::Scene;
-use core::sprite::Sprite;
-use core::font::Font;
-use core::unit;
-use core::unit::{Vec2, AABB};
-use core::Core;
+use game::font::pixels::RGBA;
+use game::input::keycode;
+use game::scene::Scene;
+use game::sprite::Sprite;
+use game::font::Font;
+use game::unit;
+use game::unit::{Vec2, AABB};
+use game::Game;
 
 use player::Player;
 use ball::Ball;
@@ -28,9 +28,9 @@ pub struct Main {
 }
 
 impl Main {
-    pub fn new(core: &mut Core) -> Main {
-        let ref mut renderer = core.renderer;
-        let ref mut mixer = core.mixer;
+    pub fn new(game: &mut Game) -> Main {
+        let ref mut renderer = game.renderer;
+        let ref mut mixer = game.mixer;
 
         let bg = Sprite::from_file(renderer, "assets/background.png".to_owned());
 
@@ -64,8 +64,8 @@ impl Main {
 }
 
 impl Scene for Main {
-    fn update(&mut self, core: &mut Core) {
-        let ref mut input = core.input;
+    fn update(&mut self, game: &mut Game) {
+        let ref mut input = game.input;
         // player1 input
         if input.is_key_held(keycode::WKey) && input.is_key_held(keycode::SKey) {
             self.player1.stop_move();
@@ -94,22 +94,23 @@ impl Scene for Main {
             self.ball.emit();
         }
 
-        self.player1.update(core.dt, &self.top_wall_aabb, &self.bottom_wall_aabb);
-        self.player2.update(core.dt, &self.top_wall_aabb, &self.bottom_wall_aabb);
-        self.ball.update(core.dt,
+        self.player1.update(game.dt, &self.top_wall_aabb, &self.bottom_wall_aabb);
+        self.player2.update(game.dt, &self.top_wall_aabb, &self.bottom_wall_aabb);
+        self.ball.update(game.dt,
                          &self.top_wall_aabb, &self.bottom_wall_aabb,
                          &self.left_wall_aabb, &self.right_wall_aabb,
                          &mut self.player1, &mut self.player2);
     }
 
-    fn render(&mut self, core: &mut Core) {
-        let ref renderer = core.renderer;
+    fn render(&mut self, game: &mut Game) {
+        let ref renderer = game.renderer;
 
         renderer.clear();
 
         self.background.render(renderer, unit::vec2::ZERO);
 
-        self.font.render(renderer, "NBX", RGBA(0, 255, 0, 255), Vec2::new(0.0, 32.0));
+        self.font.render(renderer, self.player1.score().to_str(), RGBA(0, 255, 0, 255), Vec2::new(180.0, 32.0));
+        self.font.render(renderer, self.player2.score().to_str(), RGBA(0, 255, 0, 255), Vec2::new(270.0, 32.0));
 
         self.player1.render(renderer);
         self.player2.render(renderer);
